@@ -14,31 +14,27 @@ public class ReservationDAOImpl implements ReservationDAO{
 
     private List<Reservation> allReservations = new ArrayList<>();
 
+    { loadData();}
 
-    {
-       loadData();
-    }
-
-    public ReservationDAOImpl() throws IOException {
+    public ReservationDAOImpl() {
     }
 
     @Override
-    public void reserveFlight(int flightId, List<Map> passengers) throws IOException {
+    public void reserveFlight(int flightId, List<Map> passengers){
         Reservation reservation = new Reservation(flightId,passengers);
         allReservations.add(reservation);
         saveData();
     }
 
     @Override
-    public void declineReservation(int reservationId) throws IOException {
+    public void declineReservation(String reservationId) {
         try {
             Optional<Reservation> neededReservation = allReservations.stream()
-                    .filter(e -> e.getId() == reservationId).findAny();
-            int index = allReservations.indexOf(neededReservation.get());
-            allReservations.remove(index);
+                    .filter(e -> e.getId().equals(reservationId)).findAny();
+            allReservations.remove(neededReservation.get());
             saveData();
         } catch (IndexOutOfBoundsException e){
-            System.out.println("Ups, sorry but this reservation id is not valid");
+            e.printStackTrace();
         }
 
     }
@@ -50,20 +46,12 @@ public class ReservationDAOImpl implements ReservationDAO{
             reservations = (ArrayList<Reservation>) allReservations.stream()
                     .filter(e -> e.isReservationContainPassenger(name, surname)).collect(Collectors.toList());
         } catch (NullPointerException e) {
-            System.out.println("Sorry you don’t have reservations");
+            e.printStackTrace();
         }
         return reservations;
     }
 
-    public void showReservations(String name, String surname) {
-        allReservations.stream().forEach(e -> {
-            if (e.isReservationContainPassenger(name,surname)){
-                System.out.println(e.toString());
-            }
-        });
-    }
-
-    private void saveData() throws IOException {
+    private void saveData()  {
         try {
             FileOutputStream fos = new FileOutputStream("src/main/resources/reservationsDb.txt");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -74,20 +62,21 @@ public class ReservationDAOImpl implements ReservationDAO{
         }
     }
 
-    private void loadData() throws IOException {
+    private void loadData() {
         try {
-            FileInputStream fis = new FileInputStream("src/main/resources/reservationsDb.txt");
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            File file = new File("src/main/resources/reservationsDb.txt");
-            if (file.length() != 0){
+            try {
+                FileInputStream fis = new FileInputStream("src/main/resources/reservationsDb.txt");
+                ObjectInputStream ois = new ObjectInputStream(fis);
                 try {
-                    ArrayList<Reservation> reservation = (ArrayList<Reservation>) ois.readObject();
-                    allReservations = reservation;
+                    allReservations = (ArrayList<Reservation>) ois.readObject();
                 } catch (ClassNotFoundException e){
                     e.printStackTrace();
                 }
+            } catch (EOFException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e){
+
+        } catch (IOException  e){
             e.printStackTrace();
         }
     }

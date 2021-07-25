@@ -9,6 +9,7 @@ import java.util.Map;
 
 public interface ReservationDAO {
     void reserveFlight(int flightId, List<Map> passengers) throws IOException, ClassNotFoundException;
-    void declineReservation(int reservationId) throws IOException;
-    ArrayList<Reservation> getReservations(String name,String surname);
+    void declineReservation(String reservationId) throws IOException;
+
+    ArrayList<Reservation> getReservations(String name, String surname);
 }
