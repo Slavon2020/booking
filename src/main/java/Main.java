@@ -1,9 +1,8 @@
-
-import java.io.FileNotFoundException;
+import console.Console;
 
 public class Main {
-    public static void main(String[] args) throws FileNotFoundException {
-        System.out.println("hello");
-
+    public static void main(String[] args) {
+        Console console = new Console();
+        console.run();
     }
 }
