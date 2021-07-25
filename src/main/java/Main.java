@@ -1,4 +1,5 @@
 import console.Console;
+import controller.ReservationController;
 import dao.ReservationDAOImpl;
 import service.ReservationService;
 
@@ -12,13 +13,12 @@ public class Main {
     public static void main(String[] args) {
 //        Console console = new Console();
 //        console.run();
-        ReservationService reservationService = new ReservationService();
+        ReservationController reservationController = new ReservationController();
         //Peter Griffin
-        reservationService.showReservations("Peter","Griffin");
+        reservationController.showReservations("Peter","Griffin");
         //Ivan Bydko
-        reservationService.showReservations("Ivan","Bydko");
+        reservationController.showReservations("Ivan","Bydko");
         // Brian Griffin
-        reservationService.showReservations("Brian","Griffin");
-
+        reservationController.showReservations("Brian","Griffin");
     }
 }

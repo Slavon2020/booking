@@ -10,9 +10,6 @@ import java.util.Map;
 public class ReservationService {
     private final ReservationDAOImpl reservationDAO = new ReservationDAOImpl();
 
-    public ReservationService() {
-    }
-
     public void reserveFlight(int flightId, List<Map> passengers) {
         reservationDAO.reserveFlight(flightId,passengers);
     }

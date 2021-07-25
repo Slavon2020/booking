@@ -16,9 +16,6 @@ public class ReservationDAOImpl implements ReservationDAO{
 
     { loadData();}
 
-    public ReservationDAOImpl() {
-    }
-
     @Override
     public void reserveFlight(int flightId, List<Map> passengers){
         Reservation reservation = new Reservation(flightId,passengers);
