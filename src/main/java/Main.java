@@ -1,8 +1,11 @@
-import console.Console;
+import model.Flight;
+import utils.Utils;
+
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        Console console = new Console();
-        console.run();
+        List<Flight> generatedFlightsList = Utils.getRandomFlightsList();
+        System.out.println(generatedFlightsList);
     }
 }

@@ -1,19 +1,25 @@
 package console;
 
 import exceptions.IllegalMenuOptionException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import model.Flight;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
+
+import static utils.Utils.getRandomDateTime;
 
 public class Console {
 
     Scanner scanner;
     Map<Integer, String> mainMenu;
+    Random random;
 
     public Console() {
         scanner = new Scanner(System.in);
         mainMenu = new HashMap<>();
         fillMainMenuOptions();
+        random  = new Random();
 
     }
 
@@ -122,5 +128,9 @@ public class Console {
             e.printStackTrace();
         }
     }
+
+
+
+
 
 }
