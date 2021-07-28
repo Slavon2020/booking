@@ -1,26 +1,21 @@
 package console;
 
+import controller.ReservationController;
 import exceptions.IllegalMenuOptionException;
-import model.Flight;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 
-import static utils.Utils.getRandomDateTime;
-
 public class Console {
-
-    Scanner scanner;
-    Map<Integer, String> mainMenu;
-    Random random;
+    private ReservationController reservationController;
+    private Scanner scanner;
+    private Map<Integer, String> mainMenu;
+    private Random random;
 
     public Console() {
+        reservationController = new ReservationController();
         scanner = new Scanner(System.in);
         mainMenu = new HashMap<>();
         fillMainMenuOptions();
         random  = new Random();
-
     }
 
     public void run() {
@@ -108,6 +103,7 @@ public class Console {
 //        LocalDateTime localDateTime = LocalDateTime.parse(dateTime, formatter);
 //
 //        flightController.findFlights()
+//        reservationController.reserveFlight(flightId, passangers);
     }
 
     private void showFlightInfo() throws InterruptedException {
