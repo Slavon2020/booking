@@ -15,6 +15,9 @@ public class FlightDaoImpl implements FlightDao {
 
     public FlightDaoImpl() throws URISyntaxException {
     }
+    public FlightDaoImpl(String fileName) throws  URISyntaxException{
+        this.fileName = fileName;
+    }
 
     private static File getFileFromResource(String fileName) throws URISyntaxException {
         ClassLoader classLoader = FlightDaoImpl.class.getClassLoader();
