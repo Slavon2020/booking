@@ -4,10 +4,7 @@ import interfaces.ReservationDAO;
 import model.Reservation;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ReservationDAOImpl implements ReservationDAO{
@@ -17,7 +14,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     { loadData();}
 
     @Override
-    public void reserveFlight(int flightId, List<Map> passengers){
+    public void reserveFlight(int flightId, List<HashMap> passengers){
         Reservation reservation = new Reservation(flightId,passengers);
         allReservations.add(reservation);
         saveData();
