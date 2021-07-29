@@ -18,6 +18,9 @@ public class FlightService {
 
     public FlightService() throws URISyntaxException {
     }
+    public FlightService(FlightDao flightDao) throws URISyntaxException{
+        this.flightDao = flightDao;
+    }
 
     public List<Flight> getAllFlights() throws IOException, ClassNotFoundException {
         return flightDao.getAllFlights();
