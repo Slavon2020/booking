@@ -25,7 +25,7 @@ public class Utils {
     public static List<Flight> getRandomFlightsList() {
         List<Flight> flightsListToReturn = new ArrayList<>();
         int count = 0;
-        while (count < 100000) {
+        while (count < 10) {
             int destinationIndex = random.nextInt(4);
             int randomFreeTickets = random.nextInt(10);
             Flight flight = new Flight(count, randomFreeTickets, getRandomDateTime(), Destination.values()[destinationIndex]);
