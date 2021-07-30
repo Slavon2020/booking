@@ -6,9 +6,9 @@ import java.util.*;
 public class Reservation implements Serializable {
     private final String reservationId;
     private final int flightId;
-    private final List<Map> passengers;
+    private final List<HashMap> passengers;
 
-    public Reservation(int flightId, List<Map> passengers) {
+    public Reservation(int flightId, List<HashMap> passengers) {
         this.reservationId = UUID.randomUUID().toString();
         this.flightId = flightId;
         this.passengers = passengers;
@@ -19,7 +19,7 @@ public class Reservation implements Serializable {
 
     public boolean isReservationContainPassenger(String name, String surname){
         try {
-            Optional<Map> passengerReservations = passengers.stream()
+            Optional<HashMap> passengerReservations = passengers.stream()
                     .filter(e -> e.get("name").equals(name) &&
                             e.get("surName").equals(surname)).findAny();
             return passengerReservations.isPresent();

@@ -31,6 +31,7 @@ public class Flight implements Serializable {
         this.destination = destination;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

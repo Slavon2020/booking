@@ -16,10 +16,7 @@ import java.util.stream.Collectors;
 public class FlightService {
     FlightDao flightDao = new FlightDaoImpl();
 
-    public FlightService() throws URISyntaxException {
-    }
-    public FlightService(FlightDao flightDao) throws URISyntaxException{
-        this.flightDao = flightDao;
+    public FlightService() throws URISyntaxException, IOException {
     }
 
     public List<Flight> getAllFlights() throws IOException, ClassNotFoundException {
@@ -53,13 +50,23 @@ public class FlightService {
 
     public void addFlight(Flight flight) throws IOException, ClassNotFoundException {
         List<Flight> allFlights = getAllFlights();
-        allFlights.add(flight);
+        int index = allFlights.indexOf(flight);
+        if (index == -1) {
+            allFlights.add(flight);
+        } else {
+            allFlights.set(index, flight);
+        }
         flightDao.setFlights(allFlights);
     }
     public void addListFlights(List<Flight> flights) throws IOException, ClassNotFoundException {
         List<Flight> allFlights = getAllFlights();
         allFlights.addAll(flights);
         flightDao.setFlights(allFlights);
+    }
+    public void decreaseFreeTickets (int id, int countTickets) throws IOException, ClassNotFoundException {
+        Flight flightById = getFlightById(id);
+        Flight flight = new Flight(flightById.getId(), flightById.getFreeTickets() - countTickets, flightById.getDateTime(), flightById.getDestination());
+        addFlight(flight);
     }
 
 

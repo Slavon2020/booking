@@ -1,26 +1,40 @@
 package console;
 
+import controller.FlightController;
+import controller.ReservationController;
+import destination.Destination;
 import exceptions.IllegalMenuOptionException;
 import model.Flight;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
+
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 //import static utils.Utils.getRandomDateTime;
 
-public class Console {
 
-    Scanner scanner;
-    Map<Integer, String> mainMenu;
-    Random random;
+public class Console {
+    private ReservationController reservationController;
+    FlightController flightController;
+    private Map<Integer, String> mainMenu;
+    private Random random;
 
     public Console() {
-        scanner = new Scanner(System.in);
+        reservationController = new ReservationController();
+        try {
+            flightController = new FlightController();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         mainMenu = new HashMap<>();
         fillMainMenuOptions();
         random  = new Random();
-
     }
 
     public void run() {
@@ -30,7 +44,9 @@ public class Console {
                 handleChoosedMainMenuOption();
             } catch (IllegalMenuOptionException e) {
                 e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
@@ -52,7 +68,8 @@ public class Console {
         }
     }
 
-    private void handleChoosedMainMenuOption() throws IllegalMenuOptionException, InterruptedException {
+    private void handleChoosedMainMenuOption() throws IllegalMenuOptionException, IOException, ClassNotFoundException {
+        Scanner scanner = new Scanner(System.in);
         String option = scanner.nextLine();
         switch (option) {
             case "1":
@@ -91,42 +108,89 @@ public class Console {
         System.out.println("cancelBooking...........");
     }
 
-    private void searchAndBookFlight() {
-//        System.out.println("Введите место назначения:");
-//        String destStr = scanner.nextLine();
-//        StringBuilder dateTime = new StringBuilder();
-//        System.out.println("Введите дату (дд.мм.гггг):");
-//        String date = scanner.nextLine();
-//        System.out.println("Введите время (чч:мм):");
-//        String time = scanner.nextLine();
-//        System.out.println("Введите необходимое количество билетов:");
-//        int ticketsNum = scanner.nextInt();
-//        dateTime.append(date);
-//        dateTime.append(" ");
-//        dateTime.append(time);
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-//        LocalDateTime localDateTime = LocalDateTime.parse(dateTime, formatter);
-//
-//        flightController.findFlights()
+    private void searchAndBookFlight() throws IOException, ClassNotFoundException {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Введите место назначения:");
+        String destStr = scanner.nextLine();
+
+
+        System.out.println("Введите дату (дд.мм.гггг):");
+        String date = scanner.nextLine();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        LocalDate localDate = LocalDate.parse(date, formatter);
+
+        System.out.println("Введите необходимое количество билетов:");
+        int ticketsNum = scanner.nextInt();
+
+        List<Flight> foundFlights = new ArrayList<>();
+        try {
+            foundFlights = flightController.findFlights(Destination.valueOf(destStr.toUpperCase()), localDate, ticketsNum);
+            System.out.println("Найденные рейсы: ");
+            for (int i = 0; i < foundFlights.size(); i++) {
+                System.out.println((i + 1) + ". " + foundFlights.get(i));
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Выберите порядковый номер рейса или нажмите 0 для возврата в главное меню");
+        int choosedOption = scanner.nextInt();
+
+        if (choosedOption == 0 || choosedOption > foundFlights.size()) return;
+
+        Flight choosedFlight = foundFlights.get(choosedOption - 1);
+        System.out.println("Выбранный рейс: " + choosedFlight);
+
+        List<HashMap> passengersList = createPassengersList(ticketsNum);
+
+        reservationController.reserveFlight(choosedFlight.getId(), passengersList);
+//        flightController.   must subtract free tickets number...
+        flightController.decreaseFreeTickets(choosedFlight.getId(),  ticketsNum);
+
     }
 
-    private void showFlightInfo() throws InterruptedException {
+    private List <HashMap> createPassengersList(int ticketsNum) {
+        List<HashMap> passengersList = new ArrayList<>();
 
+        for (int i = 0; i < ticketsNum; i++) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Введите имя пвссажира " + (i + 1) + ": ");
+            String name = scanner.nextLine();
+            System.out.println("Введите фамилию пвссажира " + (i + 1) + ": ");
+            String surname = scanner.nextLine();
+            HashMap<String, String> passenger = new HashMap<>();
+            passenger.put(name, surname);
+            passengersList.add(passenger);
+        }
+
+        return passengersList;
+    }
+
+    private void showFlightInfo(){
         System.out.println("Введите ID рейса:");
-        String id = scanner.nextLine();
+        Scanner scanner = new Scanner(System.in);
+        int id = scanner.nextInt();
         System.out.println("Информация о рейсе " + id);
-        Thread.sleep(3000);
-//        flightController.showFlightInfo(id);
-
+        Flight flight = null;
+        try {
+            flight = flightController.getFlightById(id);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        System.out.println(flight);
     }
 
     private void showSchedule() {
-        System.out.println("SCHEDULE......");
+    List<Flight> allFlights = new ArrayList<>();
         try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
+            allFlights = flightController.getAllFlights();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        System.out.println("SCHEDULE - " + allFlights);
     }
 
 

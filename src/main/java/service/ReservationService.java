@@ -4,13 +4,14 @@ import dao.ReservationDAOImpl;
 import model.Reservation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ReservationService {
     private final ReservationDAOImpl reservationDAO = new ReservationDAOImpl();
 
-    public void reserveFlight(int flightId, List<Map> passengers) {
+    public void reserveFlight(int flightId, List<HashMap> passengers) {
         reservationDAO.reserveFlight(flightId,passengers);
     }
 

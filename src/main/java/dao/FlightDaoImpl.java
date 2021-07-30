@@ -2,6 +2,7 @@ package dao;
 
 import interfaces.FlightDao;
 import model.Flight;
+import utils.Utils;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -13,13 +14,10 @@ public class FlightDaoImpl implements FlightDao {
     String fileName = "flightsDb.txt";
     File file = FlightDaoImpl.getFileFromResource(fileName);
 
-    public FlightDaoImpl() throws URISyntaxException {
-    }
-    public FlightDaoImpl(String fileName) throws  URISyntaxException{
-        this.fileName = fileName;
+    public FlightDaoImpl() throws URISyntaxException, IOException {
     }
 
-    private static File getFileFromResource(String fileName) throws URISyntaxException {
+    private static File getFileFromResource(String fileName) throws URISyntaxException, IOException {
         ClassLoader classLoader = FlightDaoImpl.class.getClassLoader();
         URL resource = classLoader.getResource(fileName);
         if (resource == null) {
@@ -27,7 +25,11 @@ public class FlightDaoImpl implements FlightDao {
         } else {
             // failed if files have whitespaces or special characters
             //return new File(resource.getFile());
-            return new File(resource.toURI());
+            File file = new File(resource.toURI());
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(Utils.getRandomFlightsList());
+            return file;
         }
 
     }
