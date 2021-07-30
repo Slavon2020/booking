@@ -139,7 +139,7 @@ public class Console {
         List<HashMap> passengersList = createPassengersList(ticketsNum);
 
         reservationController.reserveFlight(choosedFlight.getId(), passengersList);
-//        flightController.   must subtract free tickets number...
+//        flightController.
 
     }
 
