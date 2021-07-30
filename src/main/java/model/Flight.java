@@ -31,6 +31,27 @@ public class Flight implements Serializable {
         this.destination = destination;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Flight)) return false;
+
+        Flight flight = (Flight) o;
+
+        if (getId() != flight.getId()) return false;
+        if (!getDateTime().equals(flight.getDateTime())) return false;
+        return getDestination() == flight.getDestination();
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId();
+        result = 31 * result + getDateTime().hashCode();
+        result = 31 * result + getDestination().hashCode();
+        return result;
+    }
+
     @Override
     public String toString() {
         return  "\n"+"Flight{" +

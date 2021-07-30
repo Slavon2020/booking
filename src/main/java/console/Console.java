@@ -29,6 +29,8 @@ public class Console {
             flightController = new FlightController();
         } catch (URISyntaxException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         mainMenu = new HashMap<>();
         fillMainMenuOptions();
@@ -41,6 +43,10 @@ public class Console {
             try {
                 handleChoosedMainMenuOption();
             } catch (IllegalMenuOptionException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
@@ -62,7 +68,7 @@ public class Console {
         }
     }
 
-    private void handleChoosedMainMenuOption() throws IllegalMenuOptionException {
+    private void handleChoosedMainMenuOption() throws IllegalMenuOptionException, IOException, ClassNotFoundException {
         Scanner scanner = new Scanner(System.in);
         String option = scanner.nextLine();
         switch (option) {
@@ -102,7 +108,7 @@ public class Console {
         System.out.println("cancelBooking...........");
     }
 
-    private void searchAndBookFlight() {
+    private void searchAndBookFlight() throws IOException, ClassNotFoundException {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Введите место назначения:");
@@ -139,7 +145,9 @@ public class Console {
         List<HashMap> passengersList = createPassengersList(ticketsNum);
 
         reservationController.reserveFlight(choosedFlight.getId(), passengersList);
-//        flightController.
+
+        flightController.decreaseFreeTickets(choosedFlight.getId(),  ticketsNum);
+
 
     }
 

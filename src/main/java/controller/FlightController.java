@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class FlightController {
     FlightService flightService = new FlightService();
 
-    public FlightController() throws URISyntaxException {
+    public FlightController() throws URISyntaxException, IOException {
     }
 
     public List<Flight> getAllFlights() throws IOException, ClassNotFoundException {
@@ -41,5 +41,8 @@ public class FlightController {
     }
     public void addListFlights(List<Flight> flights) throws IOException, ClassNotFoundException {
         flightService.addListFlights(flights);
+    }
+    public void decreaseFreeTickets(int id, int countTickets) throws IOException, ClassNotFoundException {
+        flightService.decreaseFreeTickets(id, countTickets);
     }
 }
