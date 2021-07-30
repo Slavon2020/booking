@@ -21,7 +21,7 @@ public class Reservation implements Serializable {
         try {
             Optional<HashMap> passengerReservations = passengers.stream()
                     .filter(e -> e.get("name").equals(name) &&
-                            e.get("surName").equals(surname)).findAny();
+                            e.get("surname").equals(surname)).findAny();
             return passengerReservations.isPresent();
         }catch (NullPointerException e){
             return false;
@@ -33,8 +33,8 @@ public class Reservation implements Serializable {
         String[] passengersString = {"["};
         passengers.forEach(e -> {
             passengersString[0] = passengersString[0] +
-                    String.format("{ name-%s,surName-%s }"
-                            ,e.get("name"),e.get("surName"));
+                    String.format("{ name-%s,surname-%s }"
+                            ,e.get("name"),e.get("surname"));
             if (e != passengers.get(passengers.size()-1)){
                 passengersString[0] = passengersString[0] + ",";
             }
