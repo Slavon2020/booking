@@ -19,6 +19,10 @@ public class ReservationService {
         reservationDAO.declineReservation(reservationId);
     }
 
+    public Reservation getReservationById(int id) { return reservationDAO.getReservationById(id); }
+
+    public int getPassengersCount (Reservation reservation){ return reservation.getPassengers().size(); }
+
     public void showReservations(String name,String surname){
         ArrayList<Reservation> reservations = reservationDAO.getReservations(name,surname);
         reservations.forEach(e -> System.out.println(e.toString()));
