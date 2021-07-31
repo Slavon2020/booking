@@ -68,6 +68,11 @@ public class FlightService {
         Flight flight = new Flight(flightById.getId(), flightById.getFreeTickets() - countTickets, flightById.getDateTime(), flightById.getDestination());
         addFlight(flight);
     }
+    public void increaseFreeTickets (int id, int countTickets) throws IOException, ClassNotFoundException {
+        Flight flightById = getFlightById(id);
+        Flight flight = new Flight(flightById.getId(), flightById.getFreeTickets() + countTickets, flightById.getDateTime(), flightById.getDestination());
+        addFlight(flight);
+    }
 
 
 }
