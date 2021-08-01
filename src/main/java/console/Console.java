@@ -103,10 +103,16 @@ public class Console {
         System.out.println("Введите ID бронирования:");
         String reservationId = scanner.nextLine();
 
+        int flightId = reservationController.getFlightIdByReservationId(reservationId);
+        int passengersCount = reservationController.getPassengersCountByReservationId(reservationId);
 
-//        int passengersCount = reservationController.getPassengersCount();
-//        int flightId = reservationController.
-//        flightController.increaseFreeTickets(flightId, passengersCount);
+        try {
+            flightController.increaseFreeTickets(flightId, passengersCount);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         reservationController.declineReservation(reservationId);
     }
