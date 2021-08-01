@@ -14,8 +14,9 @@ public class Reservation implements Serializable {
         this.passengers = passengers;
 
     }
-
+    public List<HashMap> getPassengers(){return this.passengers;}
     public String getId(){return this.reservationId;}
+    public int getFlightId (){return this.flightId;}
 
     public boolean isReservationContainPassenger(String name, String surname){
         try {
@@ -27,6 +28,8 @@ public class Reservation implements Serializable {
             return false;
         }
     }
+
+
 
     @Override
     public String toString(){
