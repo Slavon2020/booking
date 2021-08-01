@@ -15,4 +15,5 @@ public class ReservationController {
         reservationService.declineReservation(reservationId);
     }
     public void showReservations(String name,String surname){ reservationService.showReservations(name,surname); }
+    public Reservation getReservationById(String id) { return reservationService.getReservationById(id); }
 }

@@ -19,7 +19,7 @@ public class ReservationService {
         reservationDAO.declineReservation(reservationId);
     }
 
-    public Reservation getReservationById(int id) { return reservationDAO.getReservationById(id); }
+    public Reservation getReservationById(String id) { return reservationDAO.getReservationById(id); }
 
     public int getPassengersCount (Reservation reservation){ return reservation.getPassengers().size(); }
 

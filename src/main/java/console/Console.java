@@ -5,6 +5,7 @@ import controller.ReservationController;
 import destination.Destination;
 import exceptions.IllegalMenuOptionException;
 import model.Flight;
+import model.Reservation;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -31,7 +32,7 @@ public class Console {
     }
 
     public void run() {
-        while(true) {
+        while (true) {
             showMainMenu();
             try {
                 handleChoosedMainMenuOption();
@@ -101,6 +102,12 @@ public class Console {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введите ID бронирования:");
         String reservationId = scanner.nextLine();
+
+
+//        int passengersCount = reservationController.getPassengersCount();
+//        int flightId = reservationController.
+//        flightController.increaseFreeTickets(flightId, passengersCount);
+
         reservationController.declineReservation(reservationId);
     }
 

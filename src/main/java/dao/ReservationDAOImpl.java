@@ -45,9 +45,9 @@ public class ReservationDAOImpl implements ReservationDAO{
         return reservations;
     }
 
-    public Reservation getReservationById(int id){
+    public Reservation getReservationById(String id){
             Optional<Reservation> neededReservation = allReservations.stream()
-                    .filter(e -> e.getFlightId() == id).findAny();
+                    .filter(e -> e.getId().equals(id)).findAny();
             return neededReservation.get();
     }
 
