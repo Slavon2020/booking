@@ -14,15 +14,11 @@ public class ReservationService {
     public void reserveFlight(int flightId, List<HashMap> passengers) {
         reservationDAO.reserveFlight(flightId,passengers);
     }
-
     public void declineReservation(String reservationId) {
         reservationDAO.declineReservation(reservationId);
     }
-
-    public Reservation getReservationById(String id) { return reservationDAO.getReservationById(id); }
-
-    public int getPassengersCount (Reservation reservation){ return reservation.getPassengers().size(); }
-
+    public int getPassengersCountByReservationId (String id) { return reservationDAO.getReservationById(id).getPassengers().size(); }
+    public int getFlightIdByReservationId (String id ){ return reservationDAO.getReservationById(id).getFlightId(); }
     public void showReservations(String name,String surname){
         ArrayList<Reservation> reservations = reservationDAO.getReservations(name,surname);
         reservations.forEach(e -> System.out.println(e.toString()));
