@@ -5,6 +5,7 @@ import controller.ReservationController;
 import destination.Destination;
 import exceptions.IllegalMenuOptionException;
 import model.Flight;
+import model.Reservation;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -23,9 +24,7 @@ public class Console {
         reservationController = new ReservationController();
         try {
             flightController = new FlightController();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }
         mainMenu = new HashMap<>();
@@ -33,15 +32,11 @@ public class Console {
     }
 
     public void run() {
-        while(true) {
+        while (true) {
             showMainMenu();
             try {
                 handleChoosedMainMenuOption();
-            } catch (IllegalMenuOptionException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            } catch (IllegalMenuOptionException | ClassNotFoundException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -107,6 +102,18 @@ public class Console {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введите ID бронирования:");
         String reservationId = scanner.nextLine();
+
+        int flightId = reservationController.getFlightIdByReservationId(reservationId);
+        int passengersCount = reservationController.getPassengersCountByReservationId(reservationId);
+
+        try {
+            flightController.increaseFreeTickets(flightId, passengersCount);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
         reservationController.declineReservation(reservationId);
     }
 

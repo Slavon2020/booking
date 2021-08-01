@@ -58,14 +58,23 @@ public class Reservation_tests {
     }
 
     @Test
-    void getPassengersCount_Test (){
+    void getPassengersCountById_Test (){
         testReserve(7695);
         ArrayList<Reservation> userReservations = reservationDAO.getReservations("test","test");
-        int countOfPassengers = reservationService.getPassengersCount(userReservations.get(0));
+        int countOfPassengers = reservationService.getPassengersCountByReservationId(userReservations.get(0).getId());
         assertNotEquals(countOfPassengers,0);
 
         reservationDAO.getReservations("test","test")
                 .forEach(e -> reservationDAO.declineReservation(e.getId()));
+    }
+
+    @Test
+    void getFlightIdByReservationId_Test (){
+        int flightId = 7695;
+        testReserve(flightId);
+        ArrayList<Reservation> userReservations = reservationDAO.getReservations("test","test");
+
+        assertEquals(userReservations.get(0).getFlightId(),flightId);
     }
 
     @Test
@@ -75,14 +84,6 @@ public class Reservation_tests {
         int flightId = userReservations.get(0).getFlightId();
 
         assertNotNull(flightId);
-    }
-
-    @Test
-    void getReservationById_Test (){
-        testReserve(8531);
-        Reservation reservation = reservationDAO.getReservationById(8531);
-
-        assertNotNull(reservation);
     }
 
     @Test
