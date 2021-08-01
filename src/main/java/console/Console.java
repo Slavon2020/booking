@@ -23,9 +23,7 @@ public class Console {
         reservationController = new ReservationController();
         try {
             flightController = new FlightController();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }
         mainMenu = new HashMap<>();
@@ -37,11 +35,7 @@ public class Console {
             showMainMenu();
             try {
                 handleChoosedMainMenuOption();
-            } catch (IllegalMenuOptionException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            } catch (IllegalMenuOptionException | ClassNotFoundException | IOException e) {
                 e.printStackTrace();
             }
         }
