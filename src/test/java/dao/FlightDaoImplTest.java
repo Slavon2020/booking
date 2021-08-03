@@ -19,7 +19,7 @@ class FlightDaoImplTest {
     public void should_loadFlights_when_addFlights() throws URISyntaxException, IOException, ClassNotFoundException {
         //given
 //        String fileName = "flightsDb.txt";
-        String urlString  = "src/Tests/resources/flightsDbTest.txt";
+        String urlString  = "src/test/resources/flightsDbTest.txt";
         List<Flight> generatedFlightsList = Utils.getRandomFlightsList();
         FlightDao flightDao = new FlightDaoImpl(urlString);
         //when
