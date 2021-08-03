@@ -5,48 +5,38 @@ import controller.ReservationController;
 import destination.Destination;
 import exceptions.IllegalMenuOptionException;
 import model.Flight;
+import model.Reservation;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
-//import static utils.Utils.getRandomDateTime;
 
 
 public class Console {
     private ReservationController reservationController;
     FlightController flightController;
     private Map<Integer, String> mainMenu;
-    private Random random;
 
     public Console() {
         reservationController = new ReservationController();
         try {
             flightController = new FlightController();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }
         mainMenu = new HashMap<>();
         fillMainMenuOptions();
-        random  = new Random();
     }
 
     public void run() {
-        while(true) {
+        while (true) {
             showMainMenu();
             try {
                 handleChoosedMainMenuOption();
-            } catch (IllegalMenuOptionException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            } catch (IllegalMenuOptionException | ClassNotFoundException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -96,30 +86,45 @@ public class Console {
     }
 
     private void exit() {
-        System.out.println("Before exit....");
         System.exit(1);
     }
 
     private void showMyFlights() {
-        System.out.println("showMyFlights...........");
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите имя:");
+        String name = scanner.nextLine();
+        System.out.println("Введите фамилию:");
+        String surname = scanner.nextLine();
+        reservationController.showReservations(name, surname);
     }
 
     private void cancelBooking() {
-        System.out.println("cancelBooking...........");
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите ID бронирования:");
+        String reservationId = scanner.nextLine();
+
+        int flightId = reservationController.getFlightIdByReservationId(reservationId);
+        int passengersCount = reservationController.getPassengersCountByReservationId(reservationId);
+
+        try {
+            flightController.increaseFreeTickets(flightId, passengersCount);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        reservationController.declineReservation(reservationId);
     }
 
     private void searchAndBookFlight() throws IOException, ClassNotFoundException {
         Scanner scanner = new Scanner(System.in);
-
         System.out.println("Введите место назначения:");
         String destStr = scanner.nextLine();
-
-
         System.out.println("Введите дату (дд.мм.гггг):");
         String date = scanner.nextLine();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         LocalDate localDate = LocalDate.parse(date, formatter);
-
         System.out.println("Введите необходимое количество билетов:");
         int ticketsNum = scanner.nextInt();
 
@@ -136,23 +141,16 @@ public class Console {
 
         System.out.println("Выберите порядковый номер рейса или нажмите 0 для возврата в главное меню");
         int choosedOption = scanner.nextInt();
-
         if (choosedOption == 0 || choosedOption > foundFlights.size()) return;
-
         Flight choosedFlight = foundFlights.get(choosedOption - 1);
         System.out.println("Выбранный рейс: " + choosedFlight);
-
         List<HashMap> passengersList = createPassengersList(ticketsNum);
-
         reservationController.reserveFlight(choosedFlight.getId(), passengersList);
-//        flightController.   must subtract free tickets number...
         flightController.decreaseFreeTickets(choosedFlight.getId(),  ticketsNum);
-
     }
 
     private List <HashMap> createPassengersList(int ticketsNum) {
         List<HashMap> passengersList = new ArrayList<>();
-
         for (int i = 0; i < ticketsNum; i++) {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Введите имя пвссажира " + (i + 1) + ": ");
@@ -160,10 +158,10 @@ public class Console {
             System.out.println("Введите фамилию пвссажира " + (i + 1) + ": ");
             String surname = scanner.nextLine();
             HashMap<String, String> passenger = new HashMap<>();
-            passenger.put(name, surname);
+            passenger.put("name", name);
+            passenger.put("surname", surname);
             passengersList.add(passenger);
         }
-
         return passengersList;
     }
 
@@ -192,9 +190,4 @@ public class Console {
         }
         System.out.println("SCHEDULE - " + allFlights);
     }
-
-
-
-
-
 }

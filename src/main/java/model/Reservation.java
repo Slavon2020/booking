@@ -14,27 +14,30 @@ public class Reservation implements Serializable {
         this.passengers = passengers;
 
     }
-
+    public List<HashMap> getPassengers(){return this.passengers;}
     public String getId(){return this.reservationId;}
+    public int getFlightId (){return this.flightId;}
 
     public boolean isReservationContainPassenger(String name, String surname){
         try {
             Optional<HashMap> passengerReservations = passengers.stream()
                     .filter(e -> e.get("name").equals(name) &&
-                            e.get("surName").equals(surname)).findAny();
+                            e.get("surname").equals(surname)).findAny();
             return passengerReservations.isPresent();
         }catch (NullPointerException e){
             return false;
         }
     }
 
+
+
     @Override
     public String toString(){
         String[] passengersString = {"["};
         passengers.forEach(e -> {
             passengersString[0] = passengersString[0] +
-                    String.format("{ name-%s,surName-%s }"
-                            ,e.get("name"),e.get("surName"));
+                    String.format("{ name-%s,surname-%s }"
+                            ,e.get("name"),e.get("surname"));
             if (e != passengers.get(passengers.size()-1)){
                 passengersString[0] = passengersString[0] + ",";
             }

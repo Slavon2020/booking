@@ -40,7 +40,7 @@ public class FlightService {
     public List<Flight> findFlights(Destination destination, LocalDate localDate, int passengersNum) throws IOException, ClassNotFoundException {
         return getFilteredFlight(flight -> ((flight.getDestination() == destination) &&
                     (flight.getDateTime().toLocalDate().equals(localDate)) &&
-                    (flight.getFreeTickets() > passengersNum))
+                    (flight.getFreeTickets() >= passengersNum))
         );
     }
 
@@ -66,6 +66,11 @@ public class FlightService {
     public void decreaseFreeTickets (int id, int countTickets) throws IOException, ClassNotFoundException {
         Flight flightById = getFlightById(id);
         Flight flight = new Flight(flightById.getId(), flightById.getFreeTickets() - countTickets, flightById.getDateTime(), flightById.getDestination());
+        addFlight(flight);
+    }
+    public void increaseFreeTickets (int id, int countTickets) throws IOException, ClassNotFoundException {
+        Flight flightById = getFlightById(id);
+        Flight flight = new Flight(flightById.getId(), flightById.getFreeTickets() + countTickets, flightById.getDateTime(), flightById.getDestination());
         addFlight(flight);
     }
 

@@ -45,6 +45,12 @@ public class ReservationDAOImpl implements ReservationDAO{
         return reservations;
     }
 
+    public Reservation getReservationById(String id){
+            Optional<Reservation> neededReservation = allReservations.stream()
+                    .filter(e -> e.getId().equals(id)).findAny();
+            return neededReservation.get();
+    }
+
     private void saveData()  {
         try {
             FileOutputStream fos = new FileOutputStream("src/main/resources/reservationsDb.txt");

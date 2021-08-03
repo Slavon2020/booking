@@ -45,4 +45,7 @@ public class FlightController {
     public void decreaseFreeTickets(int id, int countTickets) throws IOException, ClassNotFoundException {
         flightService.decreaseFreeTickets(id, countTickets);
     }
+    public void increaseFreeTickets(int id, int countTickets) throws IOException, ClassNotFoundException {
+        flightService.increaseFreeTickets(id, countTickets);
+    }
 }
