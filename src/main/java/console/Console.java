@@ -5,6 +5,8 @@ import controller.ReservationController;
 import destination.Destination;
 import exceptions.IllegalMenuOptionException;
 import model.Flight;
+import model.Reservation;
+
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -37,6 +39,7 @@ public class Console {
             try {
                 handleChoosedMainMenuOption();
             } catch (IllegalMenuOptionException | ClassNotFoundException | IOException e) {
+
                 if(e instanceof IllegalMenuOptionException) {
                     System.out.println("Выберите корректный пункт меню!");
                 } else {
@@ -113,6 +116,7 @@ public class Console {
             System.out.println("Вы ввели неверный ID бронирования");
             return;
         }
+
         int passengersCount = reservationController.getPassengersCountByReservationId(reservationId);
 
         try {
@@ -149,6 +153,7 @@ public class Console {
             return;
         }
 
+
         List<Flight> foundFlights = new ArrayList<>();
         try {
             foundFlights = flightController.findFlights(Destination.valueOf(destStr.toUpperCase()), localDate, ticketsNum);
@@ -156,6 +161,7 @@ public class Console {
             for (int i = 0; i < foundFlights.size(); i++) {
                 System.out.println((i + 1) + ". " + foundFlights.get(i));
             }
+
         } catch (IOException | ClassNotFoundException | IllegalArgumentException e) {
             if (e instanceof IllegalArgumentException) {
                 System.out.println("Вы ввели неправильный пункт назначения!");
@@ -182,6 +188,7 @@ public class Console {
             }
             return;
         }
+
         Flight choosedFlight = foundFlights.get(choosedOption - 1);
         System.out.println("Выбранный рейс: " + choosedFlight);
         List<HashMap> passengersList = createPassengersList(ticketsNum);
@@ -215,6 +222,7 @@ public class Console {
             System.out.println("Вы ввели некорректный номер рейса");
             return;
         }
+
         System.out.println("Информация о рейсе " + id);
         Flight flight = null;
         try {
@@ -227,6 +235,7 @@ public class Console {
 
     private void showSchedule() {
         List<Flight> allFlights = new ArrayList<>();
+
         try {
             allFlights = flightController.getAllFlights();
         } catch (IOException e) {
