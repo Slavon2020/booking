@@ -5,13 +5,13 @@ import controller.ReservationController;
 import destination.Destination;
 import exceptions.IllegalMenuOptionException;
 import model.Flight;
-import model.Reservation;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 
@@ -37,7 +37,11 @@ public class Console {
             try {
                 handleChoosedMainMenuOption();
             } catch (IllegalMenuOptionException | ClassNotFoundException | IOException e) {
-                e.printStackTrace();
+                if(e instanceof IllegalMenuOptionException) {
+                    System.out.println("Выберите корректный пункт меню!");
+                } else {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -102,8 +106,13 @@ public class Console {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введите ID бронирования:");
         String reservationId = scanner.nextLine();
-
-        int flightId = reservationController.getFlightIdByReservationId(reservationId);
+        int flightId;
+        try {
+            flightId = reservationController.getFlightIdByReservationId(reservationId);
+        } catch (NoSuchElementException e) {
+            System.out.println("Вы ввели неверный ID бронирования");
+            return;
+        }
         int passengersCount = reservationController.getPassengersCountByReservationId(reservationId);
 
         try {
@@ -124,9 +133,21 @@ public class Console {
         System.out.println("Введите дату (дд.мм.гггг):");
         String date = scanner.nextLine();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        LocalDate localDate = LocalDate.parse(date, formatter);
+        LocalDate localDate;
+        try {
+            localDate = LocalDate.parse(date, formatter);
+        } catch (DateTimeParseException e) {
+            System.out.println("Вы ввели неправильный формат даты!");
+            return;
+        }
         System.out.println("Введите необходимое количество билетов:");
-        int ticketsNum = scanner.nextInt();
+        int ticketsNum;
+        try {
+            ticketsNum = scanner.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Вы ввели неправильный формат данных!");
+            return;
+        }
 
         List<Flight> foundFlights = new ArrayList<>();
         try {
@@ -135,13 +156,32 @@ public class Console {
             for (int i = 0; i < foundFlights.size(); i++) {
                 System.out.println((i + 1) + ". " + foundFlights.get(i));
             }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+        } catch (IOException | ClassNotFoundException | IllegalArgumentException e) {
+            if (e instanceof IllegalArgumentException) {
+                System.out.println("Вы ввели неправильный пункт назначения!");
+
+            } else {
+                e.printStackTrace();
+            }
+            return;
         }
 
         System.out.println("Выберите порядковый номер рейса или нажмите 0 для возврата в главное меню");
-        int choosedOption = scanner.nextInt();
-        if (choosedOption == 0 || choosedOption > foundFlights.size()) return;
+        int choosedOption;
+        try {
+            choosedOption = scanner.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Вы ввели неправильный формат данных!");
+            return;
+        }
+        if (choosedOption == 0 || choosedOption > foundFlights.size() || foundFlights.size() == 0) {
+            if (choosedOption > foundFlights.size()) {
+                System.out.println("Неверный порядковый номер рейса!");
+            } else if (foundFlights.size() == 0) {
+                System.out.println("Нет рейсов по параметрам поиска (");
+            }
+            return;
+        }
         Flight choosedFlight = foundFlights.get(choosedOption - 1);
         System.out.println("Выбранный рейс: " + choosedFlight);
         List<HashMap> passengersList = createPassengersList(ticketsNum);
@@ -168,7 +208,13 @@ public class Console {
     private void showFlightInfo(){
         System.out.println("Введите ID рейса:");
         Scanner scanner = new Scanner(System.in);
-        int id = scanner.nextInt();
+        int id;
+        try {
+            id = scanner.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Вы ввели некорректный номер рейса");
+            return;
+        }
         System.out.println("Информация о рейсе " + id);
         Flight flight = null;
         try {
@@ -180,7 +226,7 @@ public class Console {
     }
 
     private void showSchedule() {
-    List<Flight> allFlights = new ArrayList<>();
+        List<Flight> allFlights = new ArrayList<>();
         try {
             allFlights = flightController.getAllFlights();
         } catch (IOException e) {
